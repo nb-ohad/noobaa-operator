@@ -70,6 +70,7 @@ type Reconciler struct {
 	SecretServer        *corev1.Secret
 	SecretOp            *corev1.Secret
 	SecretAdmin         *corev1.Secret
+	SecretEndpoints     *corev1.Secret
 	CloudCreds          *cloudcredsv1.CredentialsRequest
 	DefaultBackingStore *nbv1.BackingStore
 	DefaultBucketClass  *nbv1.BucketClass
@@ -111,6 +112,7 @@ func NewReconciler(
 		SecretServer:        util.KubeObject(bundle.File_deploy_internal_secret_empty_yaml).(*corev1.Secret),
 		SecretOp:            util.KubeObject(bundle.File_deploy_internal_secret_empty_yaml).(*corev1.Secret),
 		SecretAdmin:         util.KubeObject(bundle.File_deploy_internal_secret_empty_yaml).(*corev1.Secret),
+		SecretEndpoints:     util.KubeObject(bundle.File_deploy_internal_secret_empty_yaml).(*corev1.Secret),
 		CloudCreds:          util.KubeObject(bundle.File_deploy_internal_cloud_creds_aws_cr_yaml).(*cloudcredsv1.CredentialsRequest),
 		DefaultBackingStore: util.KubeObject(bundle.File_deploy_crds_noobaa_v1alpha1_backingstore_cr_yaml).(*nbv1.BackingStore),
 		DefaultBucketClass:  util.KubeObject(bundle.File_deploy_crds_noobaa_v1alpha1_bucketclass_cr_yaml).(*nbv1.BucketClass),
@@ -135,6 +137,7 @@ func NewReconciler(
 	r.SecretServer.Namespace = r.Request.Namespace
 	r.SecretOp.Namespace = r.Request.Namespace
 	r.SecretAdmin.Namespace = r.Request.Namespace
+	r.SecretEndpoints.Namespace = r.Request.Namespace
 	r.CloudCreds.Namespace = r.Request.Namespace
 	r.CloudCreds.Spec.SecretRef.Namespace = r.Request.Namespace
 	r.DefaultBackingStore.Namespace = r.Request.Namespace
@@ -158,6 +161,7 @@ func NewReconciler(
 	r.SecretServer.Name = r.Request.Name + "-server"
 	r.SecretOp.Name = r.Request.Name + "-operator"
 	r.SecretAdmin.Name = r.Request.Name + "-admin"
+	r.SecretEndpoints.Name = r.Request.Name + "-endpoints"
 	r.CloudCreds.Name = r.Request.Name + "-cloud-creds"
 	r.CloudCreds.Spec.SecretRef.Name = r.Request.Name + "-cloud-creds-secret"
 	r.CephObjectstoreUser.Name = r.Request.Name + "-ceph-objectstore-user"

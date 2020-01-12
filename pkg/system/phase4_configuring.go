@@ -36,6 +36,9 @@ func (r *Reconciler) ReconcilePhaseConfiguring() error {
 	if err := r.ReconcileSecretAdmin(); err != nil {
 		return err
 	}
+	if err := r.ReconcileSecretEndpoints(); err != nil {
+		return err
+	}
 	/*if err := r.NBClient.RegisterToCluster(); err != nil {
 		return err
 	}*/
@@ -96,6 +99,10 @@ func (r *Reconciler) ReconcileDeploymentEndpointStatus() error {
 	r.NooBaa.Status.Endpoints = &nbv1.EndpointsStatus{
 		ReadyCount:   r.DeploymentEndpoint.Status.ReadyReplicas,
 		VirtualHosts: virtualHosts,
+		SecretRef: corev1.SecretReference{
+			Name:      r.SecretEndpoints.Name,
+			Namespace: r.SecretEndpoints.Namespace,
+		},
 	}
 
 	return nil
@@ -264,6 +271,34 @@ func (r *Reconciler) ReconcileSecretAdmin() error {
 
 	r.NooBaa.Status.Accounts.Admin.SecretRef.Name = r.SecretAdmin.Name
 	r.NooBaa.Status.Accounts.Admin.SecretRef.Namespace = r.SecretAdmin.Namespace
+	return nil
+}
+
+// ReconcileSecretEndpoints creates the endpoints secret
+func (r *Reconciler) ReconcileSecretEndpoints() error {
+	util.KubeCheck(r.SecretEndpoints)
+
+	if r.SecretEndpoints.UID != "" {
+		return nil
+	}
+
+	res, err := r.NBClient.CreateAuthAPI(nb.CreateAuthParams{
+		System:   r.Request.Name,
+		Role:     "admin",
+		Email:    r.SecretOp.StringData["email"],
+		Password: r.SecretOp.StringData["password"],
+	})
+	if err != nil {
+		return err
+	}
+
+	r.SecretEndpoints.StringData["auth_token"] = res.Token
+	r.Own(r.SecretEndpoints)
+	err = r.Client.Create(r.Ctx, r.SecretEndpoints)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

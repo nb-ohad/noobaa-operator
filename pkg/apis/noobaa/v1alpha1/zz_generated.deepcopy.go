@@ -331,6 +331,7 @@ func (in *EndpointsStatus) DeepCopyInto(out *EndpointsStatus) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
+	out.SecretRef = in.SecretRef
 	return
 }
 
