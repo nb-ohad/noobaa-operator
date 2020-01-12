@@ -447,7 +447,7 @@ metadata:
 spec: {}
 `
 
-const Sha256_deploy_crds_noobaa_v1alpha1_noobaa_crd_yaml = "91a4d1a9d4d0b2d808783999fd33c2e70922214bbf121208f5eb65336edc14c6"
+const Sha256_deploy_crds_noobaa_v1alpha1_noobaa_crd_yaml = "2b4a5c838343f4cff6c59e10ca10c6e82291afe81d20777c5201163c074ea5ab"
 
 const File_deploy_crds_noobaa_v1alpha1_noobaa_crd_yaml = `apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
@@ -637,6 +637,8 @@ spec:
                 readyCount:
                   format: int32
                   type: integer
+                secretRef:
+                  type: object
                 virtualHosts:
                   items:
                     type: string
@@ -644,6 +646,7 @@ spec:
               required:
               - readyCount
               - virtualHosts
+              - secretRef
               type: object
             observedGeneration:
               description: ObservedGeneration is the most recent generation observed

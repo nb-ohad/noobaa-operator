@@ -300,8 +300,9 @@ type ServiceStatus struct {
 
 // EndpointsStatus is the status info for the endpoints deployment
 type EndpointsStatus struct {
-	ReadyCount   int32    `json:"readyCount"`
-	VirtualHosts []string `json:"virtualHosts"`
+	ReadyCount   int32                  `json:"readyCount"`
+	VirtualHosts []string               `json:"virtualHosts"`
+	SecretRef    corev1.SecretReference `json:"secretRef"`
 }
 
 const (

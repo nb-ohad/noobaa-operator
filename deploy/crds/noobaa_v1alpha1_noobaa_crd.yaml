@@ -186,6 +186,8 @@ spec:
                 readyCount:
                   format: int32
                   type: integer
+                secretRef:
+                  type: object
                 virtualHosts:
                   items:
                     type: string
@@ -193,6 +195,7 @@ spec:
               required:
               - readyCount
               - virtualHosts
+              - secretRef
               type: object
             observedGeneration:
               description: ObservedGeneration is the most recent generation observed
